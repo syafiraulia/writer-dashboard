@@ -651,6 +651,21 @@
     .badge-hasil { white-space: normal; text-align: center; line-height: 1.2; font-size: 10px; padding: 4px 8px; }
     .status-capsule, .delegasi-capsule { max-width: 100%; }
     .btn-capsule-item { padding: 4px 8px; }
+    /* ===== centang pribadi: hijau = sudah dikerjakan, pink = belum ===== */
+    .chk { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; border: 2px solid #fda4af; background: #fff; color: transparent; font-size: 12px; font-weight: 800; line-height: 1; display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; transition: all .15s; font-family: inherit; }
+    .chk:hover { border-color: #fb7185; transform: scale(1.12); }
+    .chk.on { background: #22c55e; border-color: #22c55e; color: #fff; }
+    .pj-wrap { display: flex; align-items: flex-start; gap: 10px; }
+    .pj-wrap .chk { margin-top: 2px; }
+    .pj-txt { min-width: 0; flex: 1; }
+    tr.chk-off td { background: #fff5f7; }
+    tr.chk-on td { background: #ecfdf3; }
+    tr.chk-off:hover td { background: #ffe8ee !important; }
+    tr.chk-on:hover td { background: #dcfce7 !important; }
+    .ag-ev.chk-on, .ag-ev.chk-off { padding: 12px 16px 6px; border-radius: 18px; border-left: 5px solid; }
+    .ag-ev.chk-on { background: #f0fdf4; border-left-color: #4ade80; }
+    .ag-ev.chk-off { background: #fff5f7; border-left-color: #fda4af; }
+    .ag-top .chk { margin-right: 2px; }
   </style>
 </head>
 <body>
@@ -1982,11 +1997,13 @@
           </td>` : '';
 
         return `
-          <tr>
+          <tr class="${chkCls(t)}">
             <td class="col-id">${t.id}</td>
             <td class="col-project">
+              <div class="pj-wrap">${chkBtn(t)}<div class="pj-txt">
               <span style="font-weight:700; color:#0f172a; display:block; line-height:1.45;">${t.projectTitle}</span>
               <span style="font-size:10.5px; color:#64748b; margin-top:2px; display:inline-block;">${t.typeProject} · ${t.notes || 'Tiket Mandiri'}</span>
+              </div></div>
             </td>
             <td class="col-status">
               <select class="status-capsule ${t.status}" ${isUserEditor ? '' : 'disabled'} onchange="changeStatus('${t.key || t.id}', this.value, this)">
@@ -3301,7 +3318,7 @@ function renderAgenda() {
   const photo = isUserEditor ? getPhoto(currentActiveUsername) : '', emoji = document.getElementById('mainHeaderMemoji').innerHTML;
   const sub = agTab === 'next' ? items.length + ' tiket aktif' + (late ? ' \u2022 ' + late + ' terlambat' : '') : items.length + ' tiket selesai';
   box.innerHTML = '<div class="ag-wrap"><div class="ag-head"><div><div class="ag-tabs"><button class="' + (agTab === 'next' ? 'on' : '') + '" onclick="agSet(\'next\')">Next</button><button class="' + (agTab === 'past' ? 'on' : '') + '" onclick="agSet(\'past\')">Past</button></div><div class="ag-date">' + DAYS[now.getDay()] + ', ' + now.getDate() + ' ' + MN[now.getMonth()] + ' ' + now.getFullYear() + ' \u2022 ' + sub + '</div></div><div class="ag-me">' + (photo ? '<img alt="" src="' + photo + '">' : emoji) + '</div></div>' +
-    (shown.length ? shown.map(t => { const b = agBadge(t); return '<div class="ag-ev"><div class="ag-top"><div class="ag-av">' + agAv(t.owner) + agAv(t.delegasi) + '</div><span class="ag-badge ' + b[1] + '">' + deskEsc(b[0]) + '</span></div><div class="ag-title" onclick="agOpen(\'' + agK(t) + '\')">' + deskEsc(t.projectTitle || t.id) + ' ' + agEmoji(t.typeProject) + '</div><div class="ag-sub">' + deskEsc(t.typeProject) + ' \u2022 ' + deskEsc(t.id) + '</div><div class="ag-cards">' + agCards(t) + '</div></div>'; }).join('') : '<div class="ag-empty">' + (agTab === 'next' ? 'Tidak ada tiket aktif \ud83c\udf89' : 'Belum ada tiket selesai') + '</div>') +
+    (shown.length ? shown.map(t => { const b = agBadge(t); return '<div class="ag-ev ' + chkCls(t) + '"><div class="ag-top">' + chkBtn(t) + '<div class="ag-av">' + agAv(t.owner) + agAv(t.delegasi) + '</div><span class="ag-badge ' + b[1] + '">' + deskEsc(b[0]) + '</span></div><div class="ag-title" onclick="agOpen(\'' + agK(t) + '\')">' + deskEsc(t.projectTitle || t.id) + ' ' + agEmoji(t.typeProject) + '</div><div class="ag-sub">' + deskEsc(t.typeProject) + ' \u2022 ' + deskEsc(t.id) + '</div><div class="ag-cards">' + agCards(t) + '</div></div>'; }).join('') : '<div class="ag-empty">' + (agTab === 'next' ? 'Tidak ada tiket aktif \ud83c\udf89' : 'Belum ada tiket selesai') + '</div>') +
     (items.length > agLimit ? '<button class="ag-more" onclick="agMore()">Tampilkan lebih banyak (' + (items.length - agLimit) + ')</button>' : '') + '</div>';
 }
 function agSet(t) { agTab = t; agLimit = 15; renderAgenda(); }
@@ -3416,7 +3433,7 @@ function renderAgenda() {
       return '<div class="ag-ev"><div class="ag-top"><div class="ag-av">' + g + '</div><span class="ag-badge ' + b[1] + '">' + deskEsc(b[0]) + '</span></div><div class="ag-title" title="Klik untuk edit" onclick="openEventModal(\'' + deskEsc(e.id).replace(/'/g, '&#39;') + '\')">' + deskEsc(e.title || '(tanpa judul)') + ' ' + (e.link ? '\ud83c\udfa5' : '\ud83d\udcc5') + '</div><div class="ag-sub">' + (e.allDay ? 'Seharian' : agHM(e.start) + '\u2013' + agHM(e.end)) + (e.location ? ' \u2022 ' + deskEsc(e.location.split(',')[0]) : '') + '</div><div class="ag-cards">' + agEvCards(e) + '</div></div>';
     }
     const t = x.t, b = agBadge(t);
-    return '<div class="ag-ev"><div class="ag-top"><div class="ag-av">' + agAv(t.owner) + agAv(t.delegasi) + '</div><span class="ag-badge ' + b[1] + '">' + deskEsc(b[0]) + '</span></div><div class="ag-title" onclick="agOpen(\'' + agK(t) + '\')">' + deskEsc(t.projectTitle || t.id) + ' ' + agEmoji(t.typeProject) + '</div><div class="ag-sub">' + deskEsc(t.typeProject) + ' \u2022 ' + deskEsc(t.id) + '</div><div class="ag-cards">' + agCards(t) + '</div></div>';
+    return '<div class="ag-ev ' + chkCls(t) + '"><div class="ag-top">' + chkBtn(t) + '<div class="ag-av">' + agAv(t.owner) + agAv(t.delegasi) + '</div><span class="ag-badge ' + b[1] + '">' + deskEsc(b[0]) + '</span></div><div class="ag-title" onclick="agOpen(\'' + agK(t) + '\')">' + deskEsc(t.projectTitle || t.id) + ' ' + agEmoji(t.typeProject) + '</div><div class="ag-sub">' + deskEsc(t.typeProject) + ' \u2022 ' + deskEsc(t.id) + '</div><div class="ag-cards">' + agCards(t) + '</div></div>';
   };
   box.innerHTML = '<div class="ag-wrap"><div class="ag-head"><div><div class="ag-tabs"><button class="' + (agTab === 'next' ? 'on' : '') + '" onclick="agSet(\'next\')">Next</button><button class="' + (agTab === 'past' ? 'on' : '') + '" onclick="agSet(\'past\')">Past</button></div><div class="ag-date">' + DAYS[now.getDay()] + ', ' + now.getDate() + ' ' + MN[now.getMonth()] + ' ' + now.getFullYear() + ' \u2022 ' + sub + '</div>' + hint + '</div><div style="display:flex;align-items:center;gap:10px">' + (isUserEditor && agCalState === 'ok' ? '<button class="ag-add" onclick="openEventModal()">\uff0b Acara</button>' : '') + '<div class="ag-me">' + (photo ? '<img alt="" src="' + photo + '">' : emoji) + '</div></div></div>' +
     (nextEv ? '<div class="ag-sec">\ud83d\udcc5 Meeting berikutnya</div>' + evHtml(nextEv) + '<div class="ag-sec" style="margin-top:34px">Deadline tiket</div>' : '') + (shown.length ? shown.map(evHtml).join('') : '<div class="ag-empty">' + (agTab === 'next' ? 'Tidak ada tiket aktif \ud83c\udf89' : 'Belum ada tiket selesai') + '</div>') +
@@ -3955,12 +3972,52 @@ selectProfile = function (uname) {
 };
 const _rk17 = resetKeypad;
 resetKeypad = function () { _rk17(); const pp = document.getElementById('pinPopup'); if (pp) pp.classList.remove('on'); };
+// setelah login (atau masuk mode stalker), pop-up PIN ditutup & PIN direset
+const _als17 = applyLoginSuccess; applyLoginSuccess = function () { resetKeypad(); return _als17.apply(this, arguments); };
+const _lag17 = loginAsGuest; loginAsGuest = function () { resetKeypad(); return _lag17.apply(this, arguments); };
 document.addEventListener('keydown', function (e) {
-  const pp = document.getElementById('pinPopup'); if (!pp || !pp.classList.contains('on')) return;
+  const pp = document.getElementById('pinPopup'), ov = document.getElementById('appleLoginOverlay');
+  if (!pp || !pp.classList.contains('on') || !ov || getComputedStyle(ov).display === 'none') return;   // hanya saat layar login + pop-up benar-benar terbuka
+  const t = e.target; if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;   // jangan ganggu kotak isian
   if (/^[0-9]$/.test(e.key)) { pressKey(e.key); e.preventDefault(); }
   else if (e.key === 'Backspace') { backspaceKey(); e.preventDefault(); }
   else if (e.key === 'Escape') { resetKeypad(); e.preventDefault(); }
 });
+    /* ---- centang pribadi per tiket (tersimpan di akunmu, tidak mengubah Sheet) ---- */
+let MYCHECKS = {};
+function chkId(t) { const k = String(t.key || ''), i = k.indexOf('_'); return i > -1 ? k.slice(i + 1) : String(t.id || ''); }
+function chkCls(t) { return isUserEditor ? (MYCHECKS[chkId(t)] ? 'chk-on' : 'chk-off') : ''; }
+function chkBtn(t) {
+  if (!isUserEditor) return '';
+  const id = chkId(t), on = !!MYCHECKS[id];
+  return '<button type="button" class="chk' + (on ? ' on' : '') + '" data-chk="' + deskEsc(id) + '" aria-pressed="' + on + '" title="Sudah kamu kerjakan? (catatan pribadi, tidak mengubah Sheet)" onclick="toggleCheck(this.getAttribute(\'data-chk\'))">\u2713</button>';
+}
+function refreshCheckDom(id) {
+  const on = !!MYCHECKS[id];
+  document.querySelectorAll('[data-chk]').forEach(b => {
+    if (b.getAttribute('data-chk') !== id) return;
+    b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on));
+    const host = b.closest('tr') || b.closest('.ag-ev');
+    if (host) { host.classList.toggle('chk-on', on); host.classList.toggle('chk-off', !on); }
+  });
+}
+function toggleCheck(id) {
+  if (!isUserEditor || !id) return;
+  const nv = !MYCHECKS[id];
+  if (nv) MYCHECKS[id] = 1; else delete MYCHECKS[id];
+  refreshCheckDom(id);
+  gcall('setMyCheck', currentActiveUsername, [id], nv).then(function (r) { if (!r || !r.success) throw new Error((r && r.message) || 'gagal menyimpan'); })
+    .catch(function (e) { if (nv) delete MYCHECKS[id]; else MYCHECKS[id] = 1; refreshCheckDom(id); showToast('Centang belum tersimpan: ' + ((e && e.message) || e)); });
+}
+function loadChecks() {
+  MYCHECKS = {};
+  if (!isUserEditor) return;
+  gcall('getMyChecks', currentActiveUsername).then(function (r) {
+    if (r && r.success) { MYCHECKS = r.checks || {}; try { applyFilters(); } catch (e) {} try { renderAgenda(); } catch (e) {} }
+  }).catch(function () {});
+}
+const _di18 = deskInit;
+deskInit = function () { _di18(); loadChecks(); };
     // ---------- sambungkan ke login / data ----------
     function deskInit() {
       deskLoad();
