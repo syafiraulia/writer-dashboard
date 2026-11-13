@@ -728,6 +728,14 @@
     #deskLayer.dragpic::after { content: 'Lepas gambar di sini untuk membukanya'; position: absolute; inset: 40px 12px 12px; border: 3px dashed rgba(255,255,255,.85); border-radius: 18px; background: rgba(0,0,0,.18); color: #fff; font: 700 16px -apple-system, "Plus Jakarta Sans", sans-serif; display: flex; align-items: center; justify-content: center; z-index: 9; pointer-events: none; }
     #deskPicBtn { position: absolute; left: 22px; bottom: 26px; z-index: 4; display: none; align-items: center; gap: 6px; background: rgba(255,255,255,.62); -webkit-backdrop-filter: blur(16px) saturate(170%); backdrop-filter: blur(16px) saturate(170%); border: 1px solid rgba(255,255,255,.7); color: #1d1d1f; border-radius: 999px; padding: 8px 15px; font: 600 12.5px -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", system-ui, sans-serif; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
     #deskPicBtn:hover { background: rgba(255,255,255,.85); }
+    /* ===== pintasan AppSheet ===== */
+    .as-chip { display: inline-block; margin-top: 6px; background: #ccff00; color: #0f1c00; border-radius: 999px; padding: 3px 11px; font-size: 10.5px; font-weight: 800; text-decoration: none; line-height: 1.5; }
+    .as-chip:hover { filter: brightness(.94); }
+    #asPrompt { position: fixed; left: 50%; bottom: 116px; transform: translateX(-50%); z-index: 3200; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 24px); background: #151821; color: #fff; border-radius: 999px; padding: 10px 12px 10px 22px; font-size: 13px; font-weight: 600; box-shadow: 0 16px 40px rgba(0,0,0,.4); animation: asIn .3s var(--spring-bounce); }
+    @keyframes asIn { from { opacity: 0; transform: translate(-50%, 16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    #asPrompt .as-go { background: #ccff00; color: #0f1c00; border: 0; border-radius: 999px; padding: 8px 16px; font: 800 12.5px inherit; font-family: inherit; cursor: pointer; }
+    #asPrompt .as-go:hover { filter: brightness(.94); }
+    #asPrompt .as-x { background: rgba(255,255,255,.14); color: #fff; border: 0; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 11px; }
   </style>
 </head>
 <body>
@@ -2080,7 +2088,7 @@
             <td class="col-project">
               <div class="pj-wrap">${chkBtn(t)}<div class="pj-txt">
               <span style="font-weight:700; color:#0f172a; display:block; line-height:1.45;">${t.projectTitle}</span>
-              <span style="font-size:10.5px; color:#64748b; margin-top:2px; display:inline-block;">${t.typeProject} · ${t.notes || 'Tiket Mandiri'}</span>
+              <span style="font-size:10.5px; color:#64748b; margin-top:2px; display:inline-block;">${t.typeProject} · ${t.notes || 'Tiket Mandiri'}</span>${appsheetChip(t)}
               </div></div>
             </td>
             <td class="col-status">
@@ -4441,6 +4449,49 @@ function renderProgressLegend() {
 }
 const _cwm23 = calculateWidgetMetrics;
 calculateWidgetMetrics = function () { _cwm23.apply(this, arguments); try { renderProgressLegend(); } catch (e) {} };
+    /* ---- AppSheet: pintasan ke AppSheet. Link diambil dari server setelah login (tidak ada di kode publik) ---- */
+let currentAppsheetUrl = '', currentAppsheetRow = '';
+const _als24 = applyLoginSuccess;
+applyLoginSuccess = function (user) { currentAppsheetUrl = (user && user.appsheetUrl) || ''; currentAppsheetRow = (user && user.appsheetRowUrl) || ''; return _als24.apply(this, arguments); };
+const _lag24 = loginAsGuest;
+loginAsGuest = function () { currentAppsheetUrl = ''; currentAppsheetRow = ''; return _lag24.apply(this, arguments); };
+// ID berpola kunci AppSheet (8 karakter hex) -> halaman detail tiket itu; selain itu (mis. "SCORE ANALYTIC") -> dashboard
+function appsheetIsRow(t) { return !!(currentAppsheetRow && t && /^[0-9a-f]{8}$/i.test(String(t.id || '').trim())); }
+function appsheetTicketUrl(t) { return appsheetIsRow(t) ? currentAppsheetRow.replace('{ID}', encodeURIComponent(String(t.id).trim())) : currentAppsheetUrl; }
+function openAppSheet(url) {
+  if (!isUserEditor) { showToast('Login dulu untuk membuka AppSheet.'); return; }
+  const u = url || currentAppsheetUrl;
+  if (!u) { showToast('Link AppSheet belum diatur untuk akunmu. Tempel Code.gs terbaru lalu login ulang.'); return; }
+  window.open(u, '_blank', 'noopener');
+}
+function appsheetChip(t) {
+  if (!isUserEditor || !currentAppsheetUrl || t.status !== 'On Going') return '';
+  const r = appsheetIsRow(t);
+  return '<a class="as-chip" href="' + deskEsc(appsheetTicketUrl(t)) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="' + (r ? 'Buka tiket ini di AppSheet (tab baru)' : 'Buka dashboard AppSheet (tab baru)') + '">\u2197 ' + (r ? 'Buka tiket di AppSheet' : 'Catat di AppSheet') + '</a>';
+}
+function appsheetPrompt(t, kind) {
+  if (!isUserEditor || !currentAppsheetUrl) return;
+  const old = document.getElementById('asPrompt'); if (old) old.remove();
+  const b = document.createElement('div'); b.id = 'asPrompt';
+  b.innerHTML = '<span>' + (kind === 'done' ? '\u2705 Selesai! Update di AppSheet?' : '\u25b6\ufe0f Mulai dikerjakan. Catat di AppSheet?') + '</span><button type="button" class="as-go">' + (appsheetIsRow(t) ? 'Buka tiket ini \u2197' : 'Buka AppSheet \u2197') + '</button><button type="button" class="as-x" aria-label="Tutup">\u2715</button>';
+  b.querySelector('.as-go').onclick = function () { openAppSheet(appsheetTicketUrl(t)); b.remove(); };
+  b.querySelector('.as-x').onclick = function () { b.remove(); };
+  document.body.appendChild(b);
+  setTimeout(function () { if (b.parentNode) b.remove(); }, 15000);
+}
+const _cs24 = changeStatus;
+changeStatus = function (id, ns, el) { _cs24.apply(this, arguments); if (ns === 'On Going' || ns === 'Done') appsheetPrompt((allTickets || []).find(x => (x.key || x.id) === id), ns === 'Done' ? 'done' : 'start'); };
+const _se24 = saveEdit;
+saveEdit = function (e) {
+  const ns = (document.getElementById('editStatus') || {}).value, key = document.getElementById('editId').dataset.key || document.getElementById('editId').value;
+  const tk = (allTickets || []).find(t => (t.key || t.id) === key) || {}, old = tk.status;
+  const r = _se24.apply(this, arguments);
+  if ((ns === 'On Going' || ns === 'Done') && old !== ns) appsheetPrompt(tk, ns === 'Done' ? 'done' : 'start');
+  return r;
+};
+MAC_MENUS.Go.push(['-'], ['Buka AppSheet', 'appsheet']);
+const _ma24 = macAct;
+macAct = function (a) { if (a === 'appsheet') { macMenuClose(); openAppSheet(); return; } _ma24(a); };
     // ---------- sambungkan ke login / data ----------
     function deskInit() {
       deskLoad();
