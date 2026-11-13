@@ -618,6 +618,39 @@
     #viewBanner button { background: #007aff; color: #fff; border: 0; border-radius: 999px; padding: 6px 12px; font-weight: 800; font-size: 11.5px; cursor: pointer; font-family: inherit; }
     #lightbox { position: fixed; inset: 0; z-index: 3000; display: none; align-items: center; justify-content: center; background: rgba(15,23,42,.82); padding: 24px; cursor: zoom-out; }
     #lightbox img { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+    /* ===== PIN lewat pop-up ===== */
+    .pin-popup { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; background: rgba(15,23,42,.38); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); padding: 16px; }
+    .pin-popup.on { display: flex; }
+    .pin-card { position: relative; width: 100%; max-width: 330px; max-height: 96vh; overflow-y: auto; background: rgba(255,255,255,.97); border-radius: 24px; padding: 28px 24px 20px; box-shadow: 0 0 0 .5px rgba(0,0,0,.12), 0 30px 80px rgba(15,23,42,.35); display: flex; flex-direction: column; align-items: center; animation: pinPop .2s var(--spring-bounce); }
+    @keyframes pinPop { from { opacity: 0; transform: scale(.92) translateY(8px); } to { opacity: 1; transform: none; } }
+    .pin-close { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: #f1f5f9; color: #0f172a; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pin-close:hover { background: #e2e8f0; }
+    .pin-av { width: 88px; height: 88px; border-radius: 50%; overflow: hidden; background: #f1f5f9; box-shadow: 0 0 0 3px #fff, 0 0 0 5.5px #007aff; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0; }
+    .pin-av img, .pin-av svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pin-av span { font-size: 52px !important; }
+    .pin-name { font-size: 19px; font-weight: 700; color: #0f172a; }
+    .pin-user { font-size: 12px; color: #8a8f98; margin: 2px 0 14px; }
+    .pin-card .apple-pin-section { width: 100%; }
+    .pin-card .apple-keypad-grid { width: 220px; gap: 10px; }
+    .shake { animation: pinShake .4s; }
+    @keyframes pinShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+    @media (max-height: 640px) { .pin-av { width: 64px; height: 64px; margin-bottom: 10px; } .pin-av span { font-size: 38px !important; } .pin-card { padding: 20px 20px 14px; } .pin-card .apple-keypad-grid { width: 190px; gap: 8px; } .pin-user { margin-bottom: 8px; } }
+    /* ===== Daftar Tiket muat di layar laptop tanpa scroll ke samping ===== */
+    .table-card-wide table { table-layout: fixed; min-width: 680px; }
+    th.col-type, td.col-type, th.col-kapan, td.col-kapan { display: none; }   /* type pindah ke bawah judul; tanggal sudah ada di header grup */
+    th.col-id, td.col-id { width: 78px; min-width: 0; font-size: 10.5px; }
+    th.col-project, td.col-project { width: auto; min-width: 0; }
+    th.col-status, td.col-status { width: 98px; min-width: 0; }
+    th.col-delegasi, td.col-delegasi { width: 88px; min-width: 0; }
+    th.col-hasil, td.col-hasil { width: 112px; min-width: 0; }
+    th.col-sla, td.col-sla { width: 94px; min-width: 0; }
+    th.col-durasi, td.col-durasi { width: 82px; min-width: 0; }
+    th.col-aksi, td.col-aksi { width: 112px; min-width: 0; }
+    .table-card-wide th { padding: 10px 8px; font-size: 10px; letter-spacing: .4px; }
+    .table-card-wide td { padding: 10px 8px; font-size: 11.5px; }
+    .badge-hasil { white-space: normal; text-align: center; line-height: 1.2; font-size: 10px; padding: 4px 8px; }
+    .status-capsule, .delegasi-capsule { max-width: 100%; }
+    .btn-capsule-item { padding: 4px 8px; }
   </style>
 </head>
 <body>
@@ -632,6 +665,16 @@
 
       <div class="apple-profiles-row" id="profilesRow"><div style="font-size:12px;color:#8a8f98;">Memuat profil…</div></div>
 
+      <button type="button" class="guest-login-btn" onclick="loginAsGuest()">👁️ Kepoin writer lain. Masuk mode stalker yuk!</button>
+    </div>
+
+    <!-- PIN pop-up -->
+    <div id="pinPopup" class="pin-popup" onclick="if (event.target === this) resetKeypad()">
+      <div class="pin-card">
+        <button type="button" class="pin-close" onclick="resetKeypad()" aria-label="Tutup">✕</button>
+        <div class="pin-av" id="pinAvatar"></div>
+        <div class="pin-name" id="pinName"></div>
+        <div class="pin-user" id="pinUser"></div>
       <div class="apple-pin-section" id="applePinSection">
         <div style="font-size:13px; font-weight:700; color:#0f172a;">
           Masukkan PIN untuk <span id="pinTargetUserName" style="color:#0284c7;"></span>
@@ -657,8 +700,7 @@
           <button type="button" class="apple-key-btn action" onclick="backspaceKey()">⌫</button>
         </div>
       </div>
-
-      <button type="button" class="guest-login-btn" onclick="loginAsGuest()">👁️ Kepoin writer lain. Masuk mode stalker yuk!</button>
+      </div>
     </div>
   </div>
 
@@ -891,8 +933,6 @@
             <tr>
               <th class="col-id">ID</th>
               <th class="col-project">PROJECT</th>
-              <th class="col-type">TYPE</th>
-              <th class="col-kapan">DIKERJAKAN</th>
               <th class="col-status">STATUS</th>
               <th class="col-delegasi">DELEGASI</th>
               <th class="col-hasil">HASIL</th>
@@ -902,7 +942,7 @@
             </tr>
           </thead>
           <tbody id="walletListBody">
-            <tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 36px;">Memuat data dari Google Sheets...</td></tr>
+            <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 36px;">Memuat data dari Google Sheets...</td></tr>
           </tbody>
         </table>
       </div>
@@ -1572,6 +1612,7 @@
       let durSec = parseDurationSec(t.durasi);
       const amb = String(t.ambilTiket || '').trim(), fin = String(t.finishTiket || '').trim();
       if (durSec > 0 && (!amb || (fin && String(t.durasi).trim() === fin))) durSec = 0;   // durasi palsu (AMBIL kosong / sama dengan jam FINISH)
+      if (durSec > 8 * 3600 + 30 * 60) durSec = 0;            // lebih dari 8 jam 30 menit = lintas hari, pakai SLA
       return durSec > 0 ? durSec : slaSec;
     }
     function formatDurationHuman(sec) {
@@ -1889,7 +1930,7 @@
       if (headerAksi) headerAksi.style.display = isUserEditor ? '' : 'none';
 
       if (!tickets || tickets.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 36px;">Tidak ada tiket ditemukan.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="' + (isUserEditor ? 8 : 7) + '" style="text-align: center; color: var(--text-muted); padding: 36px;">Tidak ada tiket ditemukan.</td></tr>';
         return;
       }
 
@@ -1945,10 +1986,8 @@
             <td class="col-id">${t.id}</td>
             <td class="col-project">
               <span style="font-weight:700; color:#0f172a; display:block; line-height:1.45;">${t.projectTitle}</span>
-              <span style="font-size:10.5px; color:#64748b; margin-top:2px; display:inline-block;">${t.notes || 'Tiket Mandiri'}</span>
+              <span style="font-size:10.5px; color:#64748b; margin-top:2px; display:inline-block;">${t.typeProject} · ${t.notes || 'Tiket Mandiri'}</span>
             </td>
-            <td class="col-type"><span style="font-size:11.5px; font-weight:600; color:#334155;">${t.typeProject}</span></td>
-            <td class="col-kapan">${t.dikerjakanKapan || '-'}</td>
             <td class="col-status">
               <select class="status-capsule ${t.status}" ${isUserEditor ? '' : 'disabled'} onchange="changeStatus('${t.key || t.id}', this.value, this)">
                 <option value="Done" ${t.status === 'Done' ? 'selected' : ''}>Done</option>
@@ -2004,7 +2043,7 @@
 
         html += `
           <tr class="date-section-header">
-            <td colspan="10">
+            <td colspan="${isUserEditor ? 8 : 7}">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                 <div style="display:flex; align-items:center; gap:8px;">
                   ${labelPill}
@@ -2021,7 +2060,7 @@
       if (archiveTickets.length > 0) {
         html += `
           <tr class="date-section-header">
-            <td colspan="10">
+            <td colspan="${isUserEditor ? 8 : 7}">
               <div style="display:flex; align-items:center; gap:8px;">
                 <span class="date-badge-pill archive">📦 SELESAI / ARSIP (Tanpa Tanggal Pengerjaan)</span>
                 <span style="font-size:11px; color:#64748b; font-weight:700;">• ${archiveTickets.length} tiket</span>
@@ -3903,6 +3942,25 @@ document.addEventListener('click', function (e) {
   e.preventDefault(); const src = agPhotoUrl(h.slice(4)); if (src) openPhoto(src);
 });
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { const b = document.getElementById('lightbox'); if (b) b.style.display = 'none'; } });
+    /* ---- PIN lewat pop-up: klik akun -> muncul foto + keypad ---- */
+const _sp17 = selectProfile;
+selectProfile = function (uname) {
+  _sp17(uname);
+  const p = (PROFILES || []).find(x => x.username === uname) || {};
+  const card = document.querySelector('#profilesRow .apple-profile-card[data-u="' + uname + '"]'), wrap = card && card.querySelector('.apple-avatar-wrap');
+  document.getElementById('pinAvatar').innerHTML = wrap ? wrap.innerHTML : '<span>' + deskEsc(p.emoji || '\ud83d\ude42') + '</span>';
+  document.getElementById('pinName').textContent = p.name || uname;
+  document.getElementById('pinUser').textContent = '@' + uname;
+  document.getElementById('pinPopup').classList.add('on');
+};
+const _rk17 = resetKeypad;
+resetKeypad = function () { _rk17(); const pp = document.getElementById('pinPopup'); if (pp) pp.classList.remove('on'); };
+document.addEventListener('keydown', function (e) {
+  const pp = document.getElementById('pinPopup'); if (!pp || !pp.classList.contains('on')) return;
+  if (/^[0-9]$/.test(e.key)) { pressKey(e.key); e.preventDefault(); }
+  else if (e.key === 'Backspace') { backspaceKey(); e.preventDefault(); }
+  else if (e.key === 'Escape') { resetKeypad(); e.preventDefault(); }
+});
     // ---------- sambungkan ke login / data ----------
     function deskInit() {
       deskLoad();
