@@ -666,6 +666,68 @@
     .ag-ev.chk-on { background: #f0fdf4; border-left-color: #4ade80; }
     .ag-ev.chk-off { background: #fff5f7; border-left-color: #fda4af; }
     .ag-top .chk { margin-right: 2px; }
+    /* ===== CUTI: pemisah di tabel & agenda + notifikasi H-1 ala macOS ===== */
+    .cuti-row td { background: #fffbeb !important; border-top: 1.5px dashed #fcd34d; border-bottom: 1.5px dashed #fcd34d; padding: 10px 16px !important; cursor: pointer; }
+    .cuti-row:hover td { background: #fef3c7 !important; }
+    .cuti-chip { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 12px; font-weight: 700; color: #92400e; }
+    .cuti-chip .tag { background: #fde68a; color: #78350f; border-radius: 999px; padding: 3px 11px; font-weight: 800; }
+    .cuti-chip small { font-weight: 600; opacity: .9; font-size: 11.5px; }
+    .ag-cuti { margin-top: 28px; display: flex; align-items: center; gap: 14px; background: #fffbeb; border: 1.5px dashed #fcd34d; border-radius: 18px; padding: 14px 18px; cursor: pointer; }
+    .ag-cuti .ic { font-size: 28px; }
+    .ag-cuti .t { font-weight: 800; font-size: 15px; color: #78350f; }
+    .ag-cuti .s { font-size: 12px; color: #92400e; margin-top: 2px; font-weight: 600; }
+    .ag-cuti .ag-badge { margin-left: auto; white-space: nowrap; }
+    .ag-add.ag-cuti-btn { background: #f59e0b; }
+    .ag-add.ag-cuti-btn:hover { background: #d97706; }
+    .cuti-hint { font-size: 11.5px; color: #64748b; line-height: 1.5; margin-bottom: 12px; }
+    .cuti-prev { min-height: 18px; font-size: 12px; font-weight: 700; margin: 10px 0 8px; color: #047857; }
+    .cuti-prev.bad { color: #b91c1c; }
+    .cuti-add { width: 100%; background: #0f172a; color: #fff; border: 0; border-radius: 999px; padding: 11px; font-size: 12.5px; font-weight: 800; cursor: pointer; font-family: inherit; }
+    .cuti-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; margin-top: 8px; font-size: 12px; font-weight: 700; color: #78350f; }
+    .cuti-item .grow { flex: 1; min-width: 0; }
+    .cuti-item small { display: block; font-weight: 600; color: #92400e; opacity: .9; margin-top: 1px; }
+    .cuti-item button { border: 1px solid #fca5a5; background: #fff; color: #b91c1c; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .cuti-empty { font-size: 12px; color: #94a3b8; margin-top: 8px; }
+    .cuti-notif { margin-top: 14px; font-size: 11.5px; color: #64748b; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    #cutiNotifs { position: fixed; top: 104px; right: 14px; z-index: 3100; display: flex; flex-direction: column; gap: 10px; width: 370px; max-width: calc(100vw - 28px); pointer-events: none; }
+    .ntf { pointer-events: auto; background: rgba(66,66,70,.94); -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%); color: #fff; border-radius: 22px; padding: 13px 16px; display: flex; align-items: center; gap: 13px; box-shadow: 0 14px 40px rgba(0,0,0,.38); animation: ntfIn .35s var(--spring-bounce); font-family: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", system-ui, sans-serif; }
+    @keyframes ntfIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+    .ntf-ico { width: 44px; height: 44px; border-radius: 11px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ntf-ico i { font-style: normal; font-size: 10px; font-weight: 600; color: #ff3b30; line-height: 1; }
+    .ntf-ico b { font-size: 22px; font-weight: 400; color: #111; line-height: 1.05; }
+    .ntf-body { flex: 1; min-width: 0; }
+    .ntf-k { font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,.55); letter-spacing: .5px; text-transform: uppercase; }
+    .ntf-t { font-size: 15px; font-weight: 700; margin-top: 1px; }
+    .ntf-s { font-size: 13px; opacity: .85; margin-top: 1px; }
+    .ntf-x { background: rgba(255,255,255,.14); border: 0; color: #fff; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 11px; flex-shrink: 0; }
+    .ntf-x:hover { background: rgba(255,255,255,.26); }
+    /* ===== catatan Cuti di Desktop + jendela gambar mengambang ===== */
+    #deskCutiNote { position: absolute; left: 22px; top: 190px; width: 230px; background: rgba(255,243,205,.92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: #5b3a00; border-radius: 4px; padding: 12px 14px; font-size: 11.5px; line-height: 1.45; box-shadow: 0 6px 18px rgba(0,0,0,.25); border: .5px solid rgba(120,80,0,.18); cursor: pointer; }
+    #deskCutiNote b.h { display: block; font-size: 12.5px; margin-bottom: 6px; }
+    #deskCutiNote .cn-row { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-top: 1px dashed rgba(120,80,0,.28); }
+    #deskCutiNote .cn-row:first-of-type { border-top: none; }
+    #deskCutiNote .cn-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #deskCutiNote .cn-row em { font-style: normal; font-weight: 700; white-space: nowrap; }
+    #deskCutiNote .cn-row.hot { background: rgba(255,59,48,.12); border-radius: 5px; padding-left: 5px; padding-right: 5px; }
+    #deskCutiNote .cn-row.hot em { color: #c2410c; }
+    #deskCutiNote .cn-empty { opacity: .75; }
+    #deskPics { position: absolute; left: 0; right: 0; top: 28px; bottom: 0; z-index: 3; pointer-events: none; }
+    .pic-win { position: absolute; pointer-events: auto; background: rgba(246,246,248,.98); border-radius: 12px; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 18px 48px rgba(0,0,0,.32); overflow: hidden; display: flex; flex-direction: column; user-select: none; }
+    .pic-bar { height: 30px; flex-shrink: 0; display: flex; align-items: center; gap: 7px; padding: 0 11px; background: linear-gradient(#f6f6f7, #e8e8ea); border-bottom: 1px solid rgba(0,0,0,.1); cursor: grab; touch-action: none; }
+    .pic-bar:active { cursor: grabbing; }
+    .pic-bar .tl { width: 12px; height: 12px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; line-height: 1; color: rgba(0,0,0,.55); cursor: pointer; flex-shrink: 0; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.2); }
+    .pic-bar .tl.r { background: #ff5f57; } .pic-bar .tl.y { background: #febc2e; } .pic-bar .tl.g { background: #28c840; }
+    .pic-bar:hover .tl.r::after { content: '\2715'; font-size: 7px; }
+    .pic-bar:hover .tl.y::after { content: '\2212'; }
+    .pic-bar:hover .tl.g::after { content: '+'; }
+    .pic-title { flex: 1; text-align: center; font-size: 12px; font-weight: 600; color: #3a3a3c; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 38px; }
+    .pic-body { flex: 1; min-height: 0; background: #fff; display: flex; align-items: center; justify-content: center; }
+    .pic-body img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; }
+    .pic-rs { position: absolute; right: 0; bottom: 0; width: 20px; height: 20px; cursor: nwse-resize; touch-action: none; background: linear-gradient(135deg, transparent 48%, rgba(0,0,0,.28) 48%, rgba(0,0,0,.28) 54%, transparent 54%, transparent 66%, rgba(0,0,0,.28) 66%, rgba(0,0,0,.28) 72%, transparent 72%); }
+    .pic-win.min .pic-body, .pic-win.min .pic-rs { display: none; }
+    #deskLayer.dragpic::after { content: 'Lepas gambar di sini untuk membukanya'; position: absolute; inset: 40px 12px 12px; border: 3px dashed rgba(255,255,255,.85); border-radius: 18px; background: rgba(0,0,0,.18); color: #fff; font: 700 16px -apple-system, "Plus Jakarta Sans", sans-serif; display: flex; align-items: center; justify-content: center; z-index: 9; pointer-events: none; }
+    #deskPicBtn { position: absolute; left: 22px; bottom: 26px; z-index: 4; display: none; align-items: center; gap: 6px; background: rgba(255,255,255,.62); -webkit-backdrop-filter: blur(16px) saturate(170%); backdrop-filter: blur(16px) saturate(170%); border: 1px solid rgba(255,255,255,.7); color: #1d1d1f; border-radius: 999px; padding: 8px 15px; font: 600 12.5px -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", system-ui, sans-serif; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+    #deskPicBtn:hover { background: rgba(255,255,255,.85); }
   </style>
 </head>
 <body>
@@ -871,10 +933,11 @@
             <div class="w-balance">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
-                  <div style="font-size:10px; font-weight:800;">KETEPATAN SLA <span style="font-weight:600; opacity:.7;">(tiket Done)</span></div>
+                  <div style="font-size:10px; font-weight:800;">PROGRESS PENGERJAAN <span style="font-weight:600; opacity:.7;">(Done dari semua tiket)</span></div>
                   <div class="balance-legend">
-                    <div>● Sesuai SLA – <span id="slaAchievePercent">0%</span></div>
-                    <div>○ Lewat SLA – <span id="slaOverPercent">0%</span></div>
+                    <div>● Selesai – <span id="slaAchievePercent">0%</span> <small id="progCountDone" style="font-weight:700; opacity:.75;"></small></div>
+                    <div>○ Belum selesai – <span id="slaOverPercent">0%</span> <small id="progCountLeft" style="font-weight:700; opacity:.75;"></small></div>
+                    <div id="progEmpty" style="font-weight:700; opacity:.7; font-size:9.5px;"></div>
                   </div>
                 </div>
                 <span class="balance-badge-select" id="balPeriod">Semua waktu</span>
@@ -1241,6 +1304,27 @@
           <button type="submit" id="evSave" style="background:#0f172a; color:#fff; border:none; padding:10px 20px; border-radius:var(--radius-pill); font-size:12px; font-weight:800; cursor:pointer; flex:1;">Simpan ke Google Calendar</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CUTI SAYA -->
+  <div id="modalCuti" class="modal-backdrop" onclick="if (event.target === this) closeModal('modalCuti')">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <h3 style="font-size:16px; font-weight:800;">🌴 Cuti Saya</h3>
+        <button onclick="closeModal('modalCuti')" style="background:none; border:none; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+      <p class="cuti-hint">Yang dihitung hanya <b>hari kerja (Senin–Jumat)</b>. Weekend tidak pernah dihitung, bahkan kalau tanggalnya ikut terpilih. Pengingat muncul di <b>hari kerja sebelum cuti (H-1)</b> dan tetap tampil sampai kamu tutup.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="form-group-wrap"><label class="form-label">MULAI</label><input type="date" id="cutiStart" class="form-input" oninput="cutiPreview()"></div>
+        <div class="form-group-wrap"><label class="form-label">SAMPAI (opsional)</label><input type="date" id="cutiEnd" class="form-input" oninput="cutiPreview()"></div>
+      </div>
+      <div class="form-group-wrap" style="margin-top:10px;"><label class="form-label">CATATAN (opsional)</label><input type="text" id="cutiNote" class="form-input" maxlength="120" placeholder="Contoh: Liburan keluarga"></div>
+      <div id="cutiPrev" class="cuti-prev"></div>
+      <button type="button" class="cuti-add" onclick="addCuti()">+ Tambah cuti</button>
+      <div class="form-label" style="margin-top:16px;">CUTI TERCATAT</div>
+      <div id="cutiList"></div>
+      <div class="cuti-notif"><span id="cutiPerm"></span><button type="button" class="mini-btn" onclick="cutiAskPerm()">Aktifkan notifikasi sistem</button></div>
     </div>
   </div>
 
@@ -1813,13 +1897,13 @@
       animateCounterValue('quarterTotalTickets', chartTickets.length, 600, '', '');
 
       // 5. BALANCE & SPEEDOMETER
-      animateCounterValue('balanceGaugeVal', slaRate, 850, '', '%');
-      animateCounterValue('slaAchievePercent', slaRate, 850, '', '%');
-      animateCounterValue('slaOverPercent', (100 - slaRate), 850, '', '%');
+      animateCounterValue('balanceGaugeVal', percentDone, 850, '', '%');
+      animateCounterValue('slaAchievePercent', percentDone, 850, '', '%');
+      animateCounterValue('slaOverPercent', (chartTickets.length ? 100 - percentDone : 0), 850, '', '%');
       const arc = document.getElementById('gaugeArcPath');
       if (arc) {
         const maxOffset = 205;
-        const offset = maxOffset - (maxOffset * (slaRate / 100));
+        const offset = maxOffset - (maxOffset * (percentDone / 100));
         arc.setAttribute('stroke-dashoffset', Math.max(0, offset));
       }
 
@@ -1967,13 +2051,7 @@
         }
       });
 
-      const activeDateKeys = Object.keys(dateGroups).sort((a, b) => {
-        if (a === todayStr) return -1;
-        if (b === todayStr) return 1;
-        if (a === tmrwStr) return -1;
-        if (b === tmrwStr) return 1;
-        return new Date(b) - new Date(a);
-      });
+      const activeDateKeys = Object.keys(dateGroups);   // diurutkan lewat cutiMerge: hari ini, mendatang (naik), lewat (turun)
 
       let html = '';
 
@@ -2040,7 +2118,10 @@
 
       const MAX_WORK_SEC = (8 * 3600) + (30 * 60);
 
-      activeDateKeys.forEach(dateKey => {
+      const showCuti = isUserEditor && MYCUTI.length && document.getElementById('workDateFilter').value === 'ALL' && !document.getElementById('searchInput').value && document.getElementById('typeFilter').value === 'ALL' && document.getElementById('statusFilter').value === 'ALL';
+      cutiMerge(activeDateKeys, showCuti ? cutiBlocks() : []).forEach(it => {
+        if (it.c) { html += cutiRowHtml(it.c); return; }
+        const dateKey = it.key;
         let labelPill = `<span class="date-badge-pill custom">🗓️ ${dateKey}</span>`;
         if (dateKey === todayStr) labelPill = `<span class="date-badge-pill today">🔴 HARI INI (${dateKey}) - PRIORITAS UTAMA</span>`;
         else if (dateKey === tmrwStr) labelPill = `<span class="date-badge-pill tomorrow">🟡 BESOK (${dateKey})</span>`;
@@ -3419,15 +3500,17 @@ function renderAgenda() {
   const box = document.getElementById('agendaArea'); if (!box || !agOn) return;
   const items = agList(), nextEv = agTab === 'next' ? items.find(x => x.k === 'e') : null, rest = nextEv ? items.filter(x => x !== nextEv) : items, shown = rest.slice(0, agLimit), now = new Date();
   const DAYS = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'], MN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-  const nT = items.filter(x => x.k === 't').length, nE = items.length - nT;
+  const nT = items.filter(x => x.k === 't').length, nE = items.filter(x => x.k === 'e').length, nC = items.filter(x => x.k === 'c').length;
   const late = agTab === 'next' ? items.filter(x => x.k === 't' && agBadge(x.t)[1] === 'late').length : 0;
   const photo = isUserEditor ? getPhoto(currentActiveUsername) : '', emoji = document.getElementById('mainHeaderMemoji').innerHTML;
   let sub = agTab === 'next' ? nT + ' tiket aktif' + (late ? ' \u2022 ' + late + ' terlambat' : '') : nT + ' tiket selesai';
   if (nE) sub += ' \u2022 ' + nE + ' meeting';
+  if (nC) sub += ' \u2022 ' + nC + ' cuti';
   let hint = '';
   if (isUserEditor && agCalState === 'unconfigured') hint = '<div class="ag-hint">\ud83d\udcc5 Kalender belum terhubung \u2014 isi <b>CALENDARS</b> di Code.gs untuk menampilkan meeting.</div>';
   else if (agCalState.indexOf('error:') === 0) hint = '<div class="ag-hint" style="color:#b91c1c">\ud83d\udcc5 Kalender gagal dimuat: ' + deskEsc(agCalFriendly(agCalState.slice(6))) + '</div>';
   const evHtml = x => {
+    if (x.k === 'c') return cutiAgHtml(x.c);
     if (x.k === 'e') {
       const e = x.e, b = agEvBadge(e), g = (e.guests || []).slice(0, 3).map(agAv).join('');
       return '<div class="ag-ev"><div class="ag-top"><div class="ag-av">' + g + '</div><span class="ag-badge ' + b[1] + '">' + deskEsc(b[0]) + '</span></div><div class="ag-title" title="Klik untuk edit" onclick="openEventModal(\'' + deskEsc(e.id).replace(/'/g, '&#39;') + '\')">' + deskEsc(e.title || '(tanpa judul)') + ' ' + (e.link ? '\ud83c\udfa5' : '\ud83d\udcc5') + '</div><div class="ag-sub">' + (e.allDay ? 'Seharian' : agHM(e.start) + '\u2013' + agHM(e.end)) + (e.location ? ' \u2022 ' + deskEsc(e.location.split(',')[0]) : '') + '</div><div class="ag-cards">' + agEvCards(e) + '</div></div>';
@@ -3435,7 +3518,7 @@ function renderAgenda() {
     const t = x.t, b = agBadge(t);
     return '<div class="ag-ev ' + chkCls(t) + '"><div class="ag-top">' + chkBtn(t) + '<div class="ag-av">' + agAv(t.owner) + agAv(t.delegasi) + '</div><span class="ag-badge ' + b[1] + '">' + deskEsc(b[0]) + '</span></div><div class="ag-title" onclick="agOpen(\'' + agK(t) + '\')">' + deskEsc(t.projectTitle || t.id) + ' ' + agEmoji(t.typeProject) + '</div><div class="ag-sub">' + deskEsc(t.typeProject) + ' \u2022 ' + deskEsc(t.id) + '</div><div class="ag-cards">' + agCards(t) + '</div></div>';
   };
-  box.innerHTML = '<div class="ag-wrap"><div class="ag-head"><div><div class="ag-tabs"><button class="' + (agTab === 'next' ? 'on' : '') + '" onclick="agSet(\'next\')">Next</button><button class="' + (agTab === 'past' ? 'on' : '') + '" onclick="agSet(\'past\')">Past</button></div><div class="ag-date">' + DAYS[now.getDay()] + ', ' + now.getDate() + ' ' + MN[now.getMonth()] + ' ' + now.getFullYear() + ' \u2022 ' + sub + '</div>' + hint + '</div><div style="display:flex;align-items:center;gap:10px">' + (isUserEditor && agCalState === 'ok' ? '<button class="ag-add" onclick="openEventModal()">\uff0b Acara</button>' : '') + '<div class="ag-me">' + (photo ? '<img alt="" src="' + photo + '">' : emoji) + '</div></div></div>' +
+  box.innerHTML = '<div class="ag-wrap"><div class="ag-head"><div><div class="ag-tabs"><button class="' + (agTab === 'next' ? 'on' : '') + '" onclick="agSet(\'next\')">Next</button><button class="' + (agTab === 'past' ? 'on' : '') + '" onclick="agSet(\'past\')">Past</button></div><div class="ag-date">' + DAYS[now.getDay()] + ', ' + now.getDate() + ' ' + MN[now.getMonth()] + ' ' + now.getFullYear() + ' \u2022 ' + sub + '</div>' + hint + '</div><div style="display:flex;align-items:center;gap:10px">' + (isUserEditor ? '<button class="ag-add ag-cuti-btn" onclick="openCutiModal()">\ud83c\udf34 Cuti</button>' : '') + (isUserEditor && agCalState === 'ok' ? '<button class="ag-add" onclick="openEventModal()">\uff0b Acara</button>' : '') + '<div class="ag-me">' + (photo ? '<img alt="" src="' + photo + '">' : emoji) + '</div></div></div>' +
     (nextEv ? '<div class="ag-sec">\ud83d\udcc5 Meeting berikutnya</div>' + evHtml(nextEv) + '<div class="ag-sec" style="margin-top:34px">Deadline tiket</div>' : '') + (shown.length ? shown.map(evHtml).join('') : '<div class="ag-empty">' + (agTab === 'next' ? 'Tidak ada tiket aktif \ud83c\udf89' : 'Belum ada tiket selesai') + '</div>') +
     (rest.length > agLimit ? '<button class="ag-more" onclick="agMore()">Tampilkan lebih banyak (' + (rest.length - agLimit) + ')</button>' : '') + '</div>';
   agLoadMaps();
@@ -3752,7 +3835,7 @@ async function pushShared() {
     const user = currentActiveUsername, jobs = [], needs = v => typeof v === 'string' && v.indexOf('data:image') === 0 && !deskUploaded.has(v);
     const w = deskCfg.wall;
     if (w && w.type === 'image' && needs(w.v)) jobs.push({ kind: 'wall', get: () => w.v, set: u => { w.v = u; } });
-    ['dock', 'desktop', 'dockSettings'].forEach(l => (deskCfg[l] || []).forEach(it => { if (needs(it.img)) jobs.push({ kind: 'icon', get: () => it.img, set: u => { it.img = u; } }); }));
+    ['dock', 'desktop', 'dockSettings', 'pics'].forEach(l => (deskCfg[l] || []).forEach(it => { if (needs(it.img)) jobs.push({ kind: 'icon', get: () => it.img, set: u => { it.img = u; } }); }));
     for (const j of jobs) {
       const r = await gcall('uploadSettingImage', j.get(), j.kind, user);
       if (!r || !r.success) throw new Error((r && r.message) || 'Gagal upload gambar');
@@ -3862,7 +3945,7 @@ async function viewWriter(u) {
     if (!r || !r.success) throw new Error((r && r.message) || 'Gagal memuat tampilan');
     const base = deskDefaults(), desk = r.desk || {};
     Object.keys(base).forEach(k => { if (desk[k] !== undefined) base[k] = desk[k]; });
-    base.note = false;
+    base.note = false; base.pics = [];
     if (!deskReadOnly) viewBackup = deskCfg;
     deskCfg = base; deskReadOnly = true; viewName = p.name;
     viewBanner().style.display = 'flex';
@@ -4018,6 +4101,346 @@ function loadChecks() {
 }
 const _di18 = deskInit;
 deskInit = function () { _di18(); loadChecks(); };
+    /* ---- CUTI: hanya hari kerja (Senin-Jumat); weekend tidak pernah dihitung. Tersimpan per akun, tidak mengubah Sheet ---- */
+let MYCUTI = [];
+const CUTI_HARI = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'], CUTI_HARI_S = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'], CUTI_BLN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+function cutiDate(s) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+function cutiYmd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function cutiWeekend(d) { const g = d.getDay(); return g === 0 || g === 6; }
+function cutiToday() { const d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+function cutiWorkdays(s, e) {
+  const a = cutiDate(s), b = cutiDate(e || s), out = [];
+  if (!a || !b || b < a) return out;
+  for (const d = new Date(a); d <= b && out.length < 400; d.setDate(d.getDate() + 1)) if (!cutiWeekend(d)) out.push(new Date(d));
+  return out;
+}
+function cutiNextWork(d) { const x = new Date(d); do { x.setDate(x.getDate() + 1); } while (cutiWeekend(x)); return x; }
+function cutiMakeBlock(c) {
+  const days = cutiWorkdays(c.start, c.end); if (!days.length) return null;
+  const spans = days.some((d, i) => i > 0 && Math.round((d - days[i - 1]) / 86400000) > 1);
+  return { c: c, days: days, first: days[0], last: days[days.length - 1], firstTs: days[0].getTime(), lastTs: days[days.length - 1].getTime(), count: days.length, spans: spans };
+}
+function cutiBlocks() { return MYCUTI.map(cutiMakeBlock).filter(Boolean); }
+function cutiFmt(d, y) { return CUTI_HARI[d.getDay()] + ', ' + d.getDate() + ' ' + CUTI_BLN[d.getMonth()] + (y ? ' ' + d.getFullYear() : ''); }
+function cutiLabel(b) {
+  if (b.count === 1) return cutiFmt(b.first, true);
+  return CUTI_HARI_S[b.first.getDay()] + ' ' + b.first.getDate() + ' ' + CUTI_BLN[b.first.getMonth()] + ' \u2013 ' + CUTI_HARI_S[b.last.getDay()] + ' ' + b.last.getDate() + ' ' + CUTI_BLN[b.last.getMonth()] + ' ' + b.last.getFullYear();
+}
+function cutiSub(b) { return b.count + ' hari kerja' + (b.spans ? ' (weekend tidak dihitung)' : ''); }
+function cutiWhen(b) {
+  const t = cutiToday().getTime(), dd = Math.round((b.firstTs - t) / 86400000);
+  if (b.lastTs < t) return ['Selesai', 'done'];
+  if (b.firstTs <= t) return ['Sedang cuti', 'today'];
+  return [dd === 1 ? 'Besok' : 'Dalam ' + dd + ' hari', dd <= 3 ? 'soon' : 'far'];
+}
+function cutiRowHtml(b) {
+  return '<tr class="cuti-row" onclick="openCutiModal()" title="Klik untuk mengatur cuti"><td colspan="' + (isUserEditor ? 8 : 7) + '"><div class="cuti-chip"><span class="tag">\ud83c\udf34 CUTI</span><span>' + deskEsc(cutiLabel(b)) + '</span><small>\u00b7 ' + deskEsc(cutiSub(b)) + (b.c.note ? ' \u00b7 ' + deskEsc(b.c.note) : '') + '</small></div></td></tr>';
+}
+function cutiAgHtml(b) {
+  const w = cutiWhen(b);
+  return '<div class="ag-cuti" onclick="openCutiModal()" title="Klik untuk mengatur cuti"><span class="ic">\ud83c\udf34</span><div><div class="t">CUTI \u00b7 ' + deskEsc(cutiLabel(b)) + '</div><div class="s">' + deskEsc(cutiSub(b)) + (b.c.note ? ' \u00b7 ' + deskEsc(b.c.note) : '') + '</div></div><span class="ag-badge ' + w[1] + '">' + w[0] + '</span></div>';
+}
+// urutan grup tanggal: hari ini, lalu tanggal mendatang (naik), lalu yang sudah lewat (turun). Cuti disisipkan sesuai tanggalnya.
+function cutiMerge(keys, blocks) {
+  const T0 = cutiToday().getTime(), dv = k => { const d = new Date(k); d.setHours(0, 0, 0, 0); return d.getTime(); };
+  const rank = v => v === T0 ? 0 : (v > T0 ? 1 : 2);
+  const arr = keys.map(k => ({ key: k, ts: dv(k) })).concat(blocks.map(b => ({ c: b, ts: b.firstTs })));
+  arr.sort((a, b) => { const ra = rank(a.ts), rb = rank(b.ts); if (ra !== rb) return ra - rb; if (a.ts !== b.ts) return ra === 1 ? a.ts - b.ts : b.ts - a.ts; return (a.c ? 0 : 1) - (b.c ? 0 : 1); });
+  return arr;
+}
+// agenda: sisipkan cuti ke daftar Next / Past
+const _agl19 = agList;
+agList = function () {
+  const base = _agl19(), next = agTab === 'next', t = cutiToday().getTime();
+  if (!isUserEditor) return base;
+  cutiBlocks().forEach(b => { if (next ? b.lastTs >= t : b.lastTs < t) base.push({ k: 'c', c: b, ts: b.firstTs }); });
+  const cmp = (a, b) => a === b ? 0 : (a < b ? -1 : 1);
+  return base.sort((a, b) => next ? cmp(a.ts, b.ts) : cmp(b.ts, a.ts));
+};
+
+/* ---- notifikasi pengingat H-1 (hari kerja sebelum cuti): tetap tampil sampai ditutup ---- */
+function cutiBox() { let b = document.getElementById('cutiNotifs'); if (!b) { b = document.createElement('div'); b.id = 'cutiNotifs'; document.body.appendChild(b); } return b; }
+function clearCutiNotifs() { const b = document.getElementById('cutiNotifs'); if (b) b.innerHTML = ''; }
+function cutiSysNotify(title, body, key) {
+  try {
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    const sk = 'cuti_sys_' + key; if (localStorage.getItem(sk)) return; localStorage.setItem(sk, '1');
+    new Notification(title, { body: body, tag: key, requireInteraction: true });
+  } catch (e) {}
+}
+function showCutiBanner(b, today) {
+  const key = 'cuti_off_' + currentActiveUsername + '_' + b.c.id + '_' + cutiYmd(today);
+  try { if (localStorage.getItem(key)) return; } catch (e) {}
+  const box = cutiBox(); if (Array.from(box.children).some(x => x.dataset.k === key)) return;
+  const tomorrow = Math.round((b.firstTs - today.getTime()) / 86400000) === 1;
+  const title = (tomorrow ? 'Besok' : CUTI_HARI[b.first.getDay()]) + ' kamu cuti';
+  const body = cutiLabel(b) + ' \u2022 ' + cutiSub(b) + (b.c.note ? ' \u2022 ' + b.c.note : '');
+  const el = document.createElement('div'); el.className = 'ntf'; el.dataset.k = key;
+  el.innerHTML = '<div class="ntf-ico"><i>' + CUTI_BLN[b.first.getMonth()] + '</i><b>' + b.first.getDate() + '</b></div><div class="ntf-body"><div class="ntf-k">Pengingat cuti</div><div class="ntf-t">' + deskEsc(title) + '</div><div class="ntf-s">' + deskEsc(body) + '</div></div><button class="ntf-x" title="Tutup" type="button">\u2715</button>';
+  el.querySelector('.ntf-x').onclick = function () { try { localStorage.setItem(key, '1'); } catch (e) {} el.remove(); };
+  box.appendChild(el);
+  cutiSysNotify(title, body, key);
+}
+function cutiNoticeNow(force) {
+  if (force) clearCutiNotifs();
+  if (!isUserEditor) return;
+  const today = cutiToday(); if (cutiWeekend(today)) return;       // weekend tidak dihitung: tidak ada pengingat
+  const nx = cutiNextWork(today).getTime();
+  cutiBlocks().forEach(b => { if (b.firstTs === nx) showCutiBanner(b, today); });
+}
+function loadCuti() {
+  MYCUTI = []; clearCutiNotifs();
+  if (!isUserEditor) return;
+  gcall('getMyCuti', currentActiveUsername).then(function (r) {
+    if (r && r.success) {
+      MYCUTI = (r.cuti || []).filter(c => c && c.id && c.start);
+      try { applyFilters(); } catch (e) {} try { renderAgenda(); } catch (e) {}
+      cutiNoticeNow(true);
+    }
+  }).catch(function () {});
+}
+const _di19 = deskInit;
+deskInit = function () { _di19(); loadCuti(); };
+const _sls19 = showLoginScreen;
+showLoginScreen = function () { clearCutiNotifs(); return _sls19.apply(this, arguments); };
+setInterval(function () { cutiNoticeNow(false); }, 15 * 60 * 1000);
+document.addEventListener('visibilitychange', function () { if (!document.hidden) cutiNoticeNow(false); });
+
+/* ---- jendela "Cuti Saya" ---- */
+function cutiPermText() {
+  const e = document.getElementById('cutiPerm'); if (!e) return;
+  e.textContent = (typeof Notification === 'undefined') ? 'Browser ini tidak mendukung notifikasi sistem.' : (Notification.permission === 'granted' ? 'Notifikasi sistem: aktif \u2713' : (Notification.permission === 'denied' ? 'Notifikasi sistem diblokir di pengaturan browser.' : 'Notifikasi sistem: belum aktif.'));
+}
+function cutiAskPerm() {
+  if (typeof Notification === 'undefined') { showToast('Browser ini tidak mendukung notifikasi sistem.'); return; }
+  if (Notification.permission === 'denied') { showToast('Izinkan notifikasi dulu lewat pengaturan situs di browser.'); return; }
+  Promise.resolve(Notification.requestPermission()).then(function () { cutiPermText(); cutiNoticeNow(true); });
+}
+function openCutiModal() {
+  if (!isUserEditor) { showToast('Login dulu untuk mengatur cuti.'); return; }
+  const t = cutiToday(); while (cutiWeekend(t)) t.setDate(t.getDate() + 1);
+  document.getElementById('cutiStart').value = cutiYmd(t); document.getElementById('cutiEnd').value = ''; document.getElementById('cutiNote').value = '';
+  cutiPreview(); renderCutiList(); cutiPermText();
+  document.getElementById('modalCuti').style.display = 'flex';
+}
+function cutiPreview() {
+  const s = document.getElementById('cutiStart').value, e = document.getElementById('cutiEnd').value || s, el = document.getElementById('cutiPrev');
+  const bad = m => { el.className = 'cuti-prev bad'; el.textContent = m; return null; };
+  if (!s) return bad('Pilih tanggal mulai.');
+  if (e < s) return bad('Tanggal "Sampai" tidak boleh sebelum "Mulai".');
+  const b = cutiMakeBlock({ id: 'x', start: s, end: e });
+  if (!b) return bad('Tanggal itu jatuh di weekend. Weekend tidak dihitung, jadi tidak ada hari cuti.');
+  el.className = 'cuti-prev'; el.textContent = '= ' + cutiSub(b) + ': ' + cutiLabel(b);
+  return b;
+}
+function renderCutiList() {
+  const box = document.getElementById('cutiList'); if (!box) return;
+  const bl = cutiBlocks().sort((a, b) => a.firstTs - b.firstTs);
+  box.innerHTML = bl.length ? bl.map(b => '<div class="cuti-item"><span>\ud83c\udf34</span><div class="grow">' + deskEsc(cutiLabel(b)) + '<small>' + deskEsc(cutiSub(b)) + (b.c.note ? ' \u00b7 ' + deskEsc(b.c.note) : '') + ' \u00b7 ' + cutiWhen(b)[0] + '</small></div><button type="button" onclick="delCuti(\'' + b.c.id + '\')">Hapus</button></div>').join('') : '<div class="cuti-empty">Belum ada cuti tercatat.</div>';
+}
+function persistCuti(prev, okMsg) {
+  renderCutiList(); try { applyFilters(); } catch (e) {} try { renderAgenda(); } catch (e) {} cutiNoticeNow(true);
+  gcall('saveMyCuti', currentActiveUsername, MYCUTI).then(function (r) { if (!r || !r.success) throw new Error((r && r.message) || 'gagal menyimpan'); showToast('\u2705 ' + okMsg); })
+    .catch(function (e) { MYCUTI = prev; renderCutiList(); try { applyFilters(); } catch (x) {} try { renderAgenda(); } catch (x) {} cutiNoticeNow(true); showToast('Cuti belum tersimpan: ' + ((e && e.message) || e)); });
+}
+function addCuti() {
+  const b = cutiPreview(); if (!b) return;
+  const prev = MYCUTI.slice(), s = document.getElementById('cutiStart').value, e = document.getElementById('cutiEnd').value || s;
+  MYCUTI.push({ id: 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), start: s, end: e, note: document.getElementById('cutiNote').value.trim().slice(0, 120) });
+  MYCUTI.sort((a, b2) => a.start < b2.start ? -1 : 1);
+  document.getElementById('cutiNote').value = '';
+  persistCuti(prev, 'Cuti ditambahkan.');
+}
+function delCuti(id) {
+  if (!confirm('Hapus cuti ini?')) return;
+  const prev = MYCUTI.slice(); MYCUTI = MYCUTI.filter(c => c.id !== id);
+  persistCuti(prev, 'Cuti dihapus.');
+}
+MAC_MENUS.File.push(['Atur Cuti\u2026', 'cuti']);
+const _ma19 = macAct;
+macAct = function (a) { if (a === 'cuti') { macMenuClose(); openCutiModal(); return; } _ma19(a); };
+document.addEventListener('keydown', function (e) { if (e.key !== 'Escape') return; const m = document.getElementById('modalCuti'); if (m && getComputedStyle(m).display !== 'none') { m.style.display = 'none'; } });
+    /* ---- Desktop: catatan CUTI (di bawah catatan Prioritas) ---- */
+const _dd20 = deskDefaults;
+deskDefaults = function () { const d = _dd20(); d.pics = []; return d; };
+function cutiShort(b) {
+  const f = b.first, l = b.last;
+  if (b.count === 1) return CUTI_HARI_S[f.getDay()] + ', ' + f.getDate() + ' ' + CUTI_BLN[f.getMonth()];
+  return f.getMonth() === l.getMonth() ? f.getDate() + '\u2013' + l.getDate() + ' ' + CUTI_BLN[f.getMonth()] : f.getDate() + ' ' + CUTI_BLN[f.getMonth()] + ' \u2013 ' + l.getDate() + ' ' + CUTI_BLN[l.getMonth()];
+}
+function cutiDeskNote() {
+  const L = document.getElementById('deskLayer'); if (!L) return;
+  let n = document.getElementById('deskCutiNote');
+  if (!n) { n = document.createElement('div'); n.id = 'deskCutiNote'; n.title = 'Klik untuk mengatur cuti'; n.onclick = function () { openCutiModal(); }; L.appendChild(n); }
+  const main = document.getElementById('deskNote');
+  const show = !!(isUserEditor && !deskReadOnly && deskCfg && deskCfg.note);
+  n.style.display = show ? 'block' : 'none'; if (!show) return;
+  const today = cutiToday(), nx = cutiNextWork(today).getTime();
+  const bl = cutiBlocks().filter(b => b.lastTs >= today.getTime()).sort((a, b) => a.firstTs - b.firstTs).slice(0, 3);
+  n.style.top = ((main && main.style.display !== 'none') ? main.offsetTop + main.offsetHeight + 12 : 18) + 'px';
+  let h = '<b class="h">\ud83c\udf34 Cuti</b>';
+  if (!bl.length) h += '<div class="cn-empty">Belum ada cuti. Klik untuk menambah.</div>';
+  bl.forEach(b => { const w = cutiWhen(b), h1 = !cutiWeekend(today) && b.firstTs === nx; h += '<div class="cn-row' + (h1 ? ' hot' : '') + '"><span>' + deskEsc(cutiShort(b)) + '</span><em>' + (h1 ? 'H-1 \u2022 ' : '') + w[0] + '</em></div>'; });
+  n.innerHTML = h;
+}
+const _drn20 = deskRefreshNote;
+deskRefreshNote = function () { _drn20(); cutiDeskNote(); };
+const _ra20 = renderAgenda;
+renderAgenda = function () { _ra20.apply(this, arguments); try { cutiDeskNote(); } catch (e) {} };
+
+/* ---- Desktop: jendela GAMBAR mengambang (ala Preview). Tetap terbuka sampai ditutup (tombol merah) ---- */
+const PIC_MAX = 8, PIC_TB = 30;
+function picLayer() { let P = document.getElementById('deskPics'); if (!P) { P = document.createElement('div'); P.id = 'deskPics'; document.getElementById('deskLayer').appendChild(P); } return P; }
+function picGeom(p) {
+  const L = document.getElementById('deskLayer'), W = L.clientWidth || 900, H = Math.max(120, (L.clientHeight || 600) - 28);
+  const w = Math.min(Math.max(p.w || 360, 160), Math.max(160, W - 16)), bodyH = Math.round(w * (p.ar || 0.75)), full = PIC_TB + bodyH;
+  const fy = typeof p.fy === 'number' ? p.fy : 0.1, fx = typeof p.fx === 'number' ? p.fx : 0.6;
+  return { W: W, H: H, w: w, bodyH: bodyH, full: full, h: p.min ? PIC_TB : full, left: fx * Math.max(0, W - w), top: fy * Math.max(0, H - Math.min(full, H)) };
+}
+function picStyle(el, p) {
+  const g = picGeom(p);
+  el.style.width = g.w + 'px'; el.style.height = g.h + 'px'; el.style.left = g.left + 'px'; el.style.top = g.top + 'px';
+  el.classList.toggle('min', !!p.min); return g;
+}
+function picReorderZ() { document.querySelectorAll('#deskPics .pic-win').forEach(el => { const i = (deskCfg.pics || []).findIndex(x => x.id === el.dataset.id); el.style.zIndex = 10 + i; }); }
+function picClose(id) { deskCfg.pics = (deskCfg.pics || []).filter(x => x.id !== id); deskSave(); deskRenderPics(); }
+function picBind(el, p) {
+  const bar = el.querySelector('.pic-bar'), rs = el.querySelector('.pic-rs');
+  const raise = () => { const a = deskCfg.pics, i = a.indexOf(p); if (i > -1 && i !== a.length - 1) { a.push(a.splice(i, 1)[0]); picReorderZ(); return true; } return false; };
+  el.addEventListener('pointerdown', () => { raise(); });
+  el.querySelector('.tl.r').addEventListener('click', e => { e.stopPropagation(); picClose(p.id); });
+  el.querySelector('.tl.y').addEventListener('click', e => { e.stopPropagation(); p.min = !p.min; picStyle(el, p); deskSave(); });
+  el.querySelector('.tl.g').addEventListener('click', e => {
+    e.stopPropagation(); const g = picGeom(p);
+    if (!p.big) { p.w0 = p.w; p.w = Math.min(Math.round(g.W * 0.7), 980); p.big = true; } else { p.w = p.w0 || 360; p.big = false; }
+    p.min = false; picStyle(el, p); deskSave();
+  });
+  let sx, sy, ol, ot, drag = false;
+  bar.addEventListener('pointerdown', e => { if (e.target.classList.contains('tl')) return; drag = true; sx = e.clientX; sy = e.clientY; ol = el.offsetLeft; ot = el.offsetTop; try { bar.setPointerCapture(e.pointerId); } catch (x) {} });
+  bar.addEventListener('pointermove', e => { if (!drag) return; const g = picGeom(p); el.style.left = Math.min(Math.max(0, ol + e.clientX - sx), Math.max(0, g.W - g.w)) + 'px'; el.style.top = Math.min(Math.max(0, ot + e.clientY - sy), Math.max(0, g.H - g.h)) + 'px'; });
+  bar.addEventListener('pointerup', () => {
+    if (!drag) return; drag = false; const g = picGeom(p);
+    p.fx = el.offsetLeft / Math.max(1, g.W - g.w); p.fy = el.offsetTop / Math.max(1, g.H - Math.min(g.full, g.H)); p.fx = Math.min(1, Math.max(0, p.fx)); p.fy = Math.min(1, Math.max(0, p.fy)); deskSave();
+  });
+  let rx, rw, rz = false;
+  rs.addEventListener('pointerdown', e => { e.stopPropagation(); rz = true; rx = e.clientX; rw = p.w; raise(); try { rs.setPointerCapture(e.pointerId); } catch (x) {} });
+  rs.addEventListener('pointermove', e => { if (!rz) return; const g = picGeom(p); p.w = Math.min(Math.max(rw + e.clientX - rx, 160), Math.max(160, g.W - el.offsetLeft - 4)); p.big = false; picStyle(el, p); });
+  rs.addEventListener('pointerup', () => { if (!rz) return; rz = false; const g = picGeom(p); p.fx = el.offsetLeft / Math.max(1, g.W - g.w); deskSave(); });
+}
+function deskRenderPics() {
+  const P = picLayer(); P.innerHTML = '';
+  if (!deskCfg || deskReadOnly) return;
+  (deskCfg.pics = deskCfg.pics || []).forEach((p, i) => {
+    const el = document.createElement('div'); el.className = 'pic-win'; el.dataset.id = p.id; el.style.zIndex = 10 + i;
+    el.innerHTML = '<div class="pic-bar"><span class="tl r" title="Tutup"></span><span class="tl y" title="Kecilkan / besarkan jendela"></span><span class="tl g" title="Perbesar / kembalikan"></span><b class="pic-title">' + deskEsc(p.name || 'Gambar') + '</b></div><div class="pic-body"><img alt="" draggable="false" src="' + deskEsc(imgSrc(p.img)) + '"></div><i class="pic-rs" title="Tarik untuk mengubah ukuran"></i>';
+    picStyle(el, p); P.appendChild(el); picBind(el, p);
+  });
+}
+const _drd20 = deskRenderDesk;
+deskRenderDesk = function () { _drd20(); deskRenderPics(); };
+const _oil20 = onImgsLoaded;
+onImgsLoaded = function () { _oil20(); try { deskRenderPics(); } catch (e) {} };
+
+function picProcess(file) {
+  return new Promise(function (res, rej) {
+    const r = new FileReader();
+    r.onload = function () {
+      const im = new Image();
+      im.onload = function () {
+        let alpha = false;
+        if (file.type === 'image/png') { try { const t = document.createElement('canvas'); t.width = Math.min(im.width, 64); t.height = Math.min(im.height, 64); const tg = t.getContext('2d'); tg.drawImage(im, 0, 0, t.width, t.height); const d = tg.getImageData(0, 0, t.width, t.height).data; for (let i = 3; i < d.length; i += 4) { if (d[i] < 250) { alpha = true; break; } } } catch (e) {} }
+        const enc = function (max) { const sc = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * sc)); c.height = Math.max(1, Math.round(im.height * sc)); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); return { data: alpha ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', 0.85), ar: c.height / c.width }; };
+        let o = enc(1400); if (o.data.length > 3500000) o = enc(900);
+        res(o);
+      };
+      im.onerror = function () { rej(new Error('Gambar tidak bisa dibaca')); };
+      im.src = r.result;
+    };
+    r.onerror = function () { rej(new Error('File tidak bisa dibaca')); };
+    r.readAsDataURL(file);
+  });
+}
+async function picAddFiles(files) {
+  if (!isUserEditor) { showToast('Login dulu untuk membuka gambar.'); return; }
+  const list = Array.from(files || []).filter(f => /^image\//.test(f.type));
+  if (!list.length) { showToast('Pilih file gambar (JPG / PNG).'); return; }
+  deskCfg.pics = deskCfg.pics || [];
+  let added = 0, skipped = 0;
+  for (const f of list) {
+    if (deskCfg.pics.length >= PIC_MAX) { skipped++; continue; }
+    try {
+      const o = await picProcess(f), n = deskCfg.pics.length;
+      const W = (document.getElementById('deskLayer').clientWidth || 900);
+      deskCfg.pics.push({ id: 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name: String(f.name || 'Gambar').slice(0, 60), img: o.data, ar: o.ar, w: Math.max(200, Math.round(Math.min(420, W * 0.34, (((document.getElementById('deskLayer').clientHeight || 600) - 28) * 0.6 - PIC_TB) / (o.ar || 0.75)))), fx: Math.max(0.05, 0.62 - n * 0.05), fy: Math.min(0.7, 0.1 + n * 0.06), min: false });
+      added++;
+    } catch (e) { showToast('\u274c ' + ((e && e.message) || e)); }
+  }
+  if (added) { deskSave(); showDesktop(); showToast('\ud83d\uddbc\ufe0f ' + added + ' gambar dibuka di Desktop. Tutup dengan tombol merah.'); }
+  if (skipped) showToast('Maksimal ' + PIC_MAX + ' gambar terbuka. Tutup salah satu dulu.');
+}
+function picOpenDialog() {
+  if (!isUserEditor) { showToast('Login dulu untuk membuka gambar.'); return; }
+  let inp = document.getElementById('deskPicInput');
+  if (!inp) { inp = document.createElement('input'); inp.type = 'file'; inp.id = 'deskPicInput'; inp.accept = 'image/*'; inp.multiple = true; inp.style.display = 'none'; inp.onchange = function () { const f = Array.from(inp.files || []); inp.value = ''; picAddFiles(f); }; document.body.appendChild(inp); }
+  inp.click();
+}
+function picCloseAll() { deskCfg.pics = []; deskSave(); deskRenderPics(); if (typeof deskRenderSettings === 'function') deskRenderSettings(); }
+(function () {
+  const L = document.getElementById('deskLayer'); if (!L) return;
+  const has = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).indexOf('Files') !== -1;
+  L.addEventListener('dragover', e => { if (!has(e) || !isUserEditor || deskReadOnly) return; e.preventDefault(); L.classList.add('dragpic'); });
+  L.addEventListener('dragleave', e => { if (e.target === L) L.classList.remove('dragpic'); });
+  L.addEventListener('drop', e => { if (!has(e)) return; e.preventDefault(); L.classList.remove('dragpic'); if (!isUserEditor || deskReadOnly) return; picAddFiles(e.dataTransfer.files); });
+})();
+MAC_MENUS.File.push(['Buka Gambar\u2026', 'pic']);
+const _ma20 = macAct;
+macAct = function (a) { if (a === 'pic') { macMenuClose(); if (!document.getElementById('deskLayer').classList.contains('on')) showDesktop(); picOpenDialog(); return; } _ma20(a); };
+const _drs20 = deskRenderSettings;
+deskRenderSettings = function () {
+  _drs20();
+  if (deskTab !== 'umum') return;
+  const b = document.getElementById('deskSetBody'); if (!b) return;
+  const n = (deskCfg && deskCfg.pics ? deskCfg.pics.length : 0);
+  b.insertAdjacentHTML('beforeend', '<div class="set-row"><span class="set-lbl">Gambar di Desktop</span><button class="mini-btn blue" onclick="closeModal(\'modalDesk\'); picOpenDialog()">Buka gambar\u2026</button><span style="font-size:12px;color:#6b7280;">' + n + ' terbuka (maks ' + PIC_MAX + ')</span>' + (n ? '<button class="mini-btn red" onclick="picCloseAll()">Tutup semua</button>' : '') + '</div>');
+};
+    /* ---- penempatan notifikasi H-1: di Desktop pindah ke kiri (di bawah catatan) supaya tidak menutupi ikon ---- */
+function cutiPlaceBox() {
+  const box = document.getElementById('cutiNotifs'); if (!box) return;
+  const L = document.getElementById('deskLayer'), onDesk = !!(L && L.classList.contains('on'));
+  if (onDesk) {
+    const m = document.getElementById('deskNote'), c = document.getElementById('deskCutiNote');
+    let top = 18;
+    if (m && m.style.display !== 'none') top = m.offsetTop + m.offsetHeight + 12;
+    if (c && c.style.display !== 'none') top = c.offsetTop + c.offsetHeight + 12;
+    box.style.left = '22px'; box.style.right = 'auto'; box.style.top = (top + 28) + 'px'; box.style.width = '330px';
+  } else { box.style.left = ''; box.style.right = '14px'; box.style.top = '104px'; box.style.width = ''; }
+}
+const _sd21 = showDesktop; showDesktop = function () { _sd21.apply(this, arguments); cutiPlaceBox(); };
+const _hd21 = hideDesktop; hideDesktop = function () { _hd21.apply(this, arguments); cutiPlaceBox(); };
+const _drn21 = deskRefreshNote; deskRefreshNote = function () { _drn21.apply(this, arguments); cutiPlaceBox(); };
+const _scb21 = showCutiBanner; showCutiBanner = function () { _scb21.apply(this, arguments); cutiPlaceBox(); };
+    /* ---- tombol "Tambah gambar" yang selalu terlihat di Desktop ---- */
+(function () {
+  const L = document.getElementById('deskLayer'); if (!L || document.getElementById('deskPicBtn')) return;
+  const b = document.createElement('button'); b.id = 'deskPicBtn'; b.type = 'button';
+  b.innerHTML = '\ud83d\uddbc\ufe0f Tambah gambar'; b.title = 'Buka gambar di Desktop (atau seret file gambar ke sini)';
+  b.onclick = function () { picOpenDialog(); };
+  L.appendChild(b);
+})();
+function picBtnVis() { const b = document.getElementById('deskPicBtn'); if (b) b.style.display = (isUserEditor && !deskReadOnly) ? 'inline-flex' : 'none'; }
+const _drn22 = deskRefreshNote; deskRefreshNote = function () { _drn22.apply(this, arguments); picBtnVis(); };
+const _sd22 = showDesktop; showDesktop = function () { _sd22.apply(this, arguments); picBtnVis(); };
+    /* ---- kartu gauge: PROGRESS PENGERJAAN (tiket Done / semua tiket di periode terpilih) ---- */
+function renderProgressLegend() {
+  const list = (allTickets || []).filter(t => isDateInBentoFilter(t.dikerjakanKapan));
+  const total = list.length, done = list.filter(t => t.status === 'Done').length, left = total - done;
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('progCountDone', total ? '\u00b7 ' + done + '/' + total + ' tiket' : '');
+  set('progCountLeft', total ? '\u00b7 ' + left + ' tiket' : '');
+  set('progEmpty', total ? '' : 'Belum ada tiket di periode ini');
+}
+const _cwm23 = calculateWidgetMetrics;
+calculateWidgetMetrics = function () { _cwm23.apply(this, arguments); try { renderProgressLegend(); } catch (e) {} };
     // ---------- sambungkan ke login / data ----------
     function deskInit() {
       deskLoad();
