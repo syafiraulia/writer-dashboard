@@ -4515,6 +4515,41 @@ const _sd25 = showDesktop; showDesktop = function () { _sd25.apply(this, argumen
 MAC_MENUS.Go.push(['Buka Talenta (absen)', 'talenta']);
 const _ma25 = macAct;
 macAct = function (a) { if (a === 'talenta') { macMenuClose(); openTalenta(); return; } _ma25(a); };
+    /* ---- Ikon tab browser: bisa diganti sendiri (disimpan di browser ini) ---- */
+const FAV_KEY = 'wd_favicon_v1';
+function favApply(d64, d180) {
+  document.querySelectorAll('link[rel~="icon"], link[rel="apple-touch-icon"]').forEach(function (l) { l.remove(); });
+  const a = document.createElement('link'); a.rel = 'icon'; a.type = 'image/png'; a.href = d64; document.head.appendChild(a);
+  const b = document.createElement('link'); b.rel = 'apple-touch-icon'; b.href = d180 || d64; document.head.appendChild(b);
+}
+function favLoad() { try { const o = JSON.parse(localStorage.getItem(FAV_KEY) || 'null'); if (o && o.s) favApply(o.s, o.l); } catch (e) {} }
+function favPick() {
+  let inp = document.getElementById('favInput');
+  if (!inp) { inp = document.createElement('input'); inp.type = 'file'; inp.id = 'favInput'; inp.accept = 'image/*'; inp.style.display = 'none'; inp.onchange = function () { const f = inp.files && inp.files[0]; inp.value = ''; if (f) favChosen(f); }; document.body.appendChild(inp); }
+  inp.click();
+}
+function favChosen(file) {
+  const rd = new FileReader();
+  rd.onerror = function () { showToast('Gagal membaca gambar.'); };
+  rd.onload = function () {
+    const im = new Image();
+    im.onerror = function () { showToast('File itu bukan gambar yang bisa dibaca.'); };
+    im.onload = function () {
+      function make(n) { const c = document.createElement('canvas'); c.width = c.height = n; const x = c.getContext('2d'); const m = Math.min(im.width, im.height); x.drawImage(im, (im.width - m) / 2, (im.height - m) / 2, m, m, 0, 0, n, n); return c.toDataURL('image/png'); }
+      const s = make(64), l = make(180);
+      favApply(s, l);
+      try { localStorage.setItem(FAV_KEY, JSON.stringify({ s: s, l: l })); showToast('Ikon tab diganti. Tersimpan di browser ini.'); }
+      catch (e) { showToast('Ikon diganti, tapi tidak bisa disimpan (browser menolak). Akan balik ke awal saat refresh.'); }
+    };
+    im.src = rd.result;
+  };
+  rd.readAsDataURL(file);
+}
+function favReset() { try { localStorage.removeItem(FAV_KEY); } catch (e) {} showToast('Ikon tab dikembalikan. Refresh halaman untuk melihatnya.'); }
+favLoad();
+MAC_MENUS.user.splice(1, 0, ['Ganti Ikon Tab…', 'favicon'], ['Kembalikan Ikon Tab', 'favicon_reset']);
+const _ma26 = macAct;
+macAct = function (a) { if (a === 'favicon') { macMenuClose(); favPick(); return; } if (a === 'favicon_reset') { macMenuClose(); favReset(); return; } _ma26(a); };
     // ---------- sambungkan ke login / data ----------
     function deskInit() {
       deskLoad();
@@ -4531,3 +4566,4 @@ macAct = function (a) { if (a === 'talenta') { macMenuClose(); openTalenta(); re
   </script>
 </body>
 </html>
+
