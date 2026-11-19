@@ -4597,6 +4597,34 @@ function asMove(id, idx, year, month, week) {
     .withFailureHandler(function (e) { if (list) list.style.opacity = ''; showToast('Gagal memindahkan: ' + (e && e.message || e)); })
     .pindahkanHasil(id, idx, year, month, week, currentActiveUsername);
 }
+    /* ---- Tiket tidak boleh diisi di tanggal cuti ---- */
+function cutiHit(ymd) {
+  if (!ymd) return null;
+  try { const bl = cutiBlocks(); for (let i = 0; i < bl.length; i++) if (bl[i].days.some(d => cutiYmd(d) === ymd)) return bl[i]; } catch (e) {}
+  return null;
+}
+function cutiBlockMsg(ymd) { const d = cutiDate(ymd); return '🌴 ' + (d ? cutiFmt(d, true) : ymd) + ' kamu sedang cuti, tiket tidak bisa diisi di tanggal ini. Pilih tanggal kerja lain ya.'; }
+function cutiMarkInput(id) {
+  const el = document.getElementById(id); if (!el) return;
+  const hit = cutiHit(el.value);
+  el.style.borderColor = hit ? '#dc2626' : ''; el.style.background = hit ? '#fef2f2' : '';
+  if (hit) showToast(cutiBlockMsg(el.value));
+}
+['addWorkDate', 'editWorkDate'].forEach(function (id) { const el = document.getElementById(id); if (el) el.addEventListener('change', function () { cutiMarkInput(id); }); });
+function cutiOrigYmd(t) { const p = String((t && t.dikerjakanKapan) || '').split('/'); return p.length === 3 ? p[2] + '-' + p[0].padStart(2, '0') + '-' + p[1].padStart(2, '0') : ''; }
+const _sn29 = saveNewTicket;
+saveNewTicket = function (e) {
+  const v = (document.getElementById('addWorkDate') || {}).value;
+  if (cutiHit(v)) { if (e && e.preventDefault) e.preventDefault(); showToast(cutiBlockMsg(v)); cutiMarkInput('addWorkDate'); return; }
+  return _sn29.apply(this, arguments);
+};
+const _se29 = saveEdit;
+saveEdit = function (e) {
+  const v = (document.getElementById('editWorkDate') || {}).value, key = document.getElementById('editId').dataset.key || document.getElementById('editId').value;
+  const tk = (allTickets || []).find(t => (t.key || t.id) === key);
+  if (cutiHit(v) && v !== cutiOrigYmd(tk)) { if (e && e.preventDefault) e.preventDefault(); showToast(cutiBlockMsg(v)); cutiMarkInput('editWorkDate'); return; }
+  return _se29.apply(this, arguments);
+};
     // ---------- sambungkan ke login / data ----------
     function deskInit() {
       deskLoad();
