@@ -3770,9 +3770,10 @@ function saveEventForm(ev) {
   const btn = document.getElementById('evSave'), label = 'Simpan ke Google Calendar'; btn.disabled = true; btn.textContent = 'Menyimpan...';
   const payload = { id: document.getElementById('evId').value, title: document.getElementById('evTitle').value.trim(), start: start, end: end, location: document.getElementById('evLoc').value.trim(), description: document.getElementById('evDesc').value.trim() };
   const ids = evPhotoIds.slice(), todo = evPicked.slice();
+  const exInfo = evExtra(); if (!exInfo) { btn.disabled = false; btn.textContent = label; return; }
   const fail = m => { btn.disabled = false; btn.textContent = label; showToast('\u274c ' + m); };
   const finish = () => {
-    payload.photos = ids;
+    payload.photos = ids; Object.assign(payload, exInfo);
     google.script.run
       .withSuccessHandler(function (r) { btn.disabled = false; btn.textContent = label; if (r && r.success) { showToast(r.message); closeModal('modalEvent'); loadCalendar(true); } else showToast('\u274c ' + ((r && r.message) || 'Gagal menyimpan.')); })
       .withFailureHandler(function (e) { fail('Error: ' + (e && e.message || e)); })
@@ -4632,6 +4633,84 @@ saveEdit = function (e) {
   if (cutiHit(v) && v !== cutiOrigYmd(tk)) { if (e && e.preventDefault) e.preventDefault(); showToast(cutiBlockMsg(v)); cutiMarkInput('editWorkDate'); return; }
   return _se29.apply(this, arguments);
 };
+    /* ---- Acara: berulang + pengingat yang bisa diatur (menit / jam / hari / minggu sebelumnya) ---- */
+const EV_UNIT = { menit: 1, jam: 60, hari: 1440, minggu: 10080 };
+function evMinToRow(m) { m = +m || 0; if (m && m % 10080 === 0) return [m / 10080, 'minggu']; if (m && m % 1440 === 0) return [m / 1440, 'hari']; if (m && m % 60 === 0) return [m / 60, 'jam']; return [m, 'menit']; }
+function evAddRem(v, u) {
+  const box = document.getElementById('evRems'); if (!box) return;
+  if (box.children.length >= 3) { showToast('Maksimal 3 pengingat per acara.'); return; }
+  const row = document.createElement('div'); row.className = 'ev-rem'; row.style.cssText = 'display:flex;gap:6px;align-items:center;margin-bottom:6px;';
+  row.innerHTML = '<input type="number" min="0" max="999" class="form-input ev-rem-v" style="width:78px;" value="' + (v == null ? 15 : v) + '"><select class="form-input ev-rem-u" style="width:110px;">' + Object.keys(EV_UNIT).map(k => '<option value="' + k + '"' + (k === (u || 'menit') ? ' selected' : '') + '>' + k + '</option>').join('') + '</select><span style="font-size:12px;color:#64748b;">sebelumnya</span><button type="button" title="Hapus pengingat" style="background:none;border:none;color:#ef4444;font-size:15px;cursor:pointer;">✕</button>';
+  row.querySelector('button').onclick = function () { row.remove(); };
+  box.appendChild(row);
+}
+function evSetRems(mins) { const box = document.getElementById('evRems'); if (!box) return; box.innerHTML = ''; (mins || []).slice(0, 3).forEach(m => { const r = evMinToRow(m); evAddRem(r[0], r[1]); }); }
+(function () {
+  const loc = document.getElementById('evLoc'); if (!loc || document.getElementById('evExtra')) return;
+  const anchor = loc.closest('.form-group-wrap'); if (!anchor) return;
+  const x = document.createElement('div'); x.id = 'evExtra'; x.style.cssText = 'display:flex;flex-direction:column;gap:11px;';
+  x.innerHTML = '<div class="form-group-wrap"><label class="form-label">ULANGI</label><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><select id="evRecur" class="form-input" style="flex:1;min-width:170px;"><option value="none">Tidak berulang</option><option value="daily">Setiap hari</option><option value="weekdays">Setiap hari kerja (Sen–Jum)</option><option value="weekly">Setiap minggu</option><option value="biweekly">Setiap 2 minggu</option><option value="monthly">Setiap bulan</option></select><span id="evUntilWrap" style="display:none;align-items:center;gap:6px;font-size:12px;color:#64748b;">sampai <input type="date" id="evUntil" class="form-input" style="width:150px;"></span></div><div id="evRecurNote" style="font-size:11px;color:#64748b;margin-top:4px;"></div></div>' +
+    '<div class="form-group-wrap"><label class="form-label">PENGINGAT</label><div id="evRems"></div><button type="button" id="evAddRem" style="background:#f1f5f9;border:1px dashed #94a3b8;color:#334155;padding:6px 12px;border-radius:999px;font-size:11.5px;font-weight:700;cursor:pointer;">+ Tambah pengingat</button><div style="font-size:11px;color:#64748b;margin-top:5px;">Muncul di dashboard ini dan di Google Calendar (HP / laptop).</div></div>';
+  anchor.parentNode.insertBefore(x, anchor);
+  document.getElementById('evAddRem').onclick = function () { evAddRem(15, 'menit'); };
+  document.getElementById('evRecur').onchange = function () { document.getElementById('evUntilWrap').style.display = this.value === 'none' ? 'none' : 'inline-flex'; };
+})();
+const _oem31 = openEventModal;
+openEventModal = function (id) {
+  _oem31(id);
+  const m = document.getElementById('modalEvent'); if (!m || m.style.display !== 'flex') return;
+  const e = id ? (agEvents || []).find(x => x.id === id) : null;
+  const rc = document.getElementById('evRecur'), un = document.getElementById('evUntil');
+  rc.value = 'none'; rc.disabled = !!e; un.value = ''; document.getElementById('evUntilWrap').style.display = 'none';
+  document.getElementById('evRecurNote').textContent = e ? 'Pengulangan hanya bisa diatur saat membuat acara baru.' : '';
+  evSetRems(e ? (e.reminders || []) : [15]);
+};
+function evExtra() {
+  const isNew = !document.getElementById('evId').value, out = {}, mins = [];
+  const rows = Array.from(document.querySelectorAll('#evRems .ev-rem'));
+  for (const r of rows) {
+    const v = Number(r.querySelector('.ev-rem-v').value), u = r.querySelector('.ev-rem-u').value;
+    if (!(v >= 0) || v !== Math.floor(v)) { showToast('⚠️ Isi angka pengingat dengan bilangan bulat.'); return null; }
+    const mm = v * EV_UNIT[u]; if (mm > 40320) { showToast('⚠️ Pengingat maksimal 4 minggu sebelumnya.'); return null; }
+    if (mins.indexOf(mm) < 0) mins.push(mm);
+  }
+  out.reminders = mins;
+  if (isNew) {
+    const f = document.getElementById('evRecur').value, u = document.getElementById('evUntil').value;
+    out.recur = { freq: f, until: (f !== 'none' && u) ? new Date(u + 'T23:59:59').getTime() : null };
+  }
+  return out;
+}
+/* ---- pengingat acara di dashboard (tetap tampil sampai ditutup) ---- */
+function evLeftText(ms) { const m = Math.round(ms / 60000); if (m <= 0) return 'dimulai sekarang'; if (m < 60) return m + ' menit lagi'; if (m < 1440) { const h = Math.floor(m / 60), r = m % 60; return h + ' jam' + (r ? ' ' + r + ' menit' : '') + ' lagi'; } return Math.round(m / 1440) + ' hari lagi'; }
+function evRemFired(k) { try { return !!localStorage.getItem('evrem_' + k); } catch (e) { return false; } }
+function evRemMark(k) { try { localStorage.setItem('evrem_' + k, '1'); } catch (e) {} }
+function evReminderTick() {
+  if (!isUserEditor || !agEvents || !agEvents.length) return;
+  const now = Date.now(), box = cutiBox();
+  agEvents.forEach(function (e) {
+    if (e.allDay || e.end <= now) return;
+    const due = (e.reminders || []).filter(m => now >= e.start - m * 60000);
+    if (!due.length) return;
+    const m = Math.min.apply(null, due), base = currentActiveUsername + '_' + e.id + '_' + e.start + '_';
+    due.forEach(x => { if (x !== m) evRemMark(base + x); });
+    const key = base + m; if (evRemFired(key)) return;
+    let el = Array.from(box.children).find(x => x.dataset.k === key);
+    const sub = evLeftText(e.start - now) + ' • ' + agHM(e.start) + (e.location ? ' • ' + e.location : '');
+    if (el) { const s = el.querySelector('.ntf-s'); if (s) s.textContent = sub; return; }
+    el = document.createElement('div'); el.className = 'ntf'; el.dataset.k = key;
+    el.innerHTML = '<div class="ntf-ico"><i>MULAI</i><b style="font-size:15px;font-weight:600">' + agHM(e.start) + '</b></div><div class="ntf-body"><div class="ntf-k">Pengingat acara</div><div class="ntf-t">' + deskEsc(e.title || '(tanpa judul)') + '</div><div class="ntf-s">' + deskEsc(sub) + '</div></div><button class="ntf-x" title="Tutup" type="button">✕</button>';
+    el.querySelector('.ntf-x').onclick = function () { evRemMark(key); el.remove(); };
+    box.appendChild(el);
+    cutiSysNotify('Acara: ' + (e.title || ''), sub, 'ev_' + key);
+  });
+}
+const _ra31 = renderAgenda;
+renderAgenda = function () { const r = _ra31.apply(this, arguments); try { evReminderTick(); } catch (e) {} return r; };
+const _di31 = deskInit;
+deskInit = function () { _di31.apply(this, arguments); setTimeout(function () { try { loadCalendar(true); } catch (e) {} }, 1500); };
+setInterval(function () { try { evReminderTick(); } catch (e) {} }, 30000);
+setInterval(function () { try { if (isUserEditor) loadCalendar(true); } catch (e) {} }, 10 * 60 * 1000);
     // ---------- sambungkan ke login / data ----------
     function deskInit() {
       deskLoad();
